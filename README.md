@@ -19,7 +19,7 @@ async def lookup_credentials(id):
     # Return {'id': 'some-id', 'key': 'some-secret'} matching credentials,
     # or None if credentials can't be found
 
-async def seen_nonce(nonce):
+async def seen_nonce(nonce, id):
     # Store nonce, return True if nonce previously seen
 
 is_authenticated, error_message, credentials = await authenticate_hawk_header(
