@@ -18,7 +18,8 @@ pip install hawkserver
 from hawkserver import authenticate_hawk_header
 
 async def lookup_credentials(id):
-    # Return credentials matching id, or None if credentials can't be found
+    # Return {'id': 'some-id', 'secret': 'some-secret'} matching credentials,
+    # or None if credentials can't be found
 
 async def seen_nonce(nonce):
     # Store nonce, return True if nonce previously seen
