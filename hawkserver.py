@@ -10,7 +10,7 @@ import re
 
 
 async def authenticate_hawk_header(
-        lookup_credentials, seen_nonce,
+        lookup_credentials, seen_nonce, max_skew,
         header, method, host, port, path, content_type, content,
 ):
     is_valid_header = re.match(r'^Hawk (((?<="), )?[a-z]+="[^"]*")*$', header)
@@ -50,7 +50,7 @@ async def authenticate_hawk_header(
     if not hmac.compare_digest(payload_hash, parsed_header['hash']):
         return False, 'Invalid hash', None
 
-    if not abs(int(datetime.now().timestamp()) - int(parsed_header['ts'])) <= 60:
+    if not abs(int(datetime.now().timestamp()) - int(parsed_header['ts'])) <= max_skew:
         return False, 'Stale ts', None
 
     if not hmac.compare_digest(correct_mac, parsed_header['mac']):
