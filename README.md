@@ -27,4 +27,6 @@ is_authenticated, error_message, credentials = authenticate_hawk_header(
     lookup_credentials, seen_nonce,
     header, method, host, port, path, content_type, content,
 )
+if not is_authenticated:
+    # Return error or raise exception as needed
 ```
