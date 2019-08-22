@@ -23,4 +23,9 @@ setuptools.setup(
     py_modules=[
         'hawkserver',
     ],
+    test_suite='test',
+    tests_require=[
+        'freezegun==0.3.12',
+        'mohawk==0.3.4',
+    ],
 )
