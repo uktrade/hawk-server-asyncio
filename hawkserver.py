@@ -15,7 +15,7 @@ async def authenticate_hawk_header(
 ):
     is_valid_header = re.match(r'^Hawk (((?<="), )?[a-z]+="[^"]*")*$', header)
     if not is_valid_header:
-        return False, 'Invalid header', {}
+        return False, 'Invalid header', None
 
     parsed_header = dict(re.findall(r'([a-z]+)="([^"]+)"', header))
 
@@ -56,7 +56,7 @@ async def authenticate_hawk_header(
     if not hmac.compare_digest(correct_mac, parsed_header['mac']):
         return False, 'Invalid mac', None
 
-    if not await seen_nonce(parsed_header['nonce'], matching_credentials['id']):
+    if await seen_nonce(parsed_header['nonce'], matching_credentials['id']):
         return False, 'Invalid nonce', None
 
     return True, '', matching_credentials
