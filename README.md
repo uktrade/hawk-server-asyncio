@@ -2,8 +2,6 @@
 
 Utility function to perform the server-side of Hawk authentication
 
-> Work-in-progress. This README serves as a rough design spec
-
 
 ## Installation
 
@@ -18,7 +16,7 @@ pip install hawkserver
 from hawkserver import authenticate_hawk_header
 
 async def lookup_credentials(id):
-    # Return {'id': 'some-id', 'secret': 'some-secret'} matching credentials,
+    # Return {'id': 'some-id', 'key': 'some-secret'} matching credentials,
     # or None if credentials can't be found
 
 async def seen_nonce(nonce):
