@@ -30,7 +30,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_bad_id_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('not-id', 'my-secret', url, 'GET', 'my-type', 'my-content')
+        header = hawk_auth_header('not-id', 'my-secret', url, 'GET', 'my-type', b'my-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
@@ -43,7 +43,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_bad_secret_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'not-secret', url, 'GET', 'my-type', 'my-content')
+        header = hawk_auth_header('my-id', 'not-secret', url, 'GET', 'my-type', b'my-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
@@ -56,7 +56,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_bad_method_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'my-secret', url, 'GET', 'my-type', 'my-content')
+        header = hawk_auth_header('my-id', 'my-secret', url, 'GET', 'my-type', b'my-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
@@ -69,7 +69,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_bad_content_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'my-type', 'not-content')
+        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'my-type', b'not-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
@@ -82,7 +82,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_bad_content_type_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'not-type', 'my-content')
+        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'not-type', b'my-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
@@ -97,7 +97,7 @@ class TestIntegration(unittest.TestCase):
         url = 'http://127.0.0.1:8080/v1/'
         past = datetime.now() + timedelta(seconds=-61)
         with freeze_time(past):
-            header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'my-type', 'my-content')
+            header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'my-type', b'my-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
@@ -111,7 +111,7 @@ class TestIntegration(unittest.TestCase):
     async def test_seen_nonce_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
         header = hawk_auth_header(
-            'my-other-id', 'my-other-secret', url, 'POST', 'my-type', 'my-content')
+            'my-other-id', 'my-other-secret', url, 'POST', 'my-type', b'my-content')
 
         passed_nonce = None
         passed_id = None
@@ -146,7 +146,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_invalid_ts_format_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'not-type', 'my-content')
+        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'not-type', b'my-content')
 
         bad_auth_header = re.sub(r'ts="[^"]+"', 'ts="non-numeric"', header)
         is_auth, error, creds = await authenticate_hawk_header(
@@ -160,7 +160,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_missing_nonce_then_not_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'not-type', 'my-content')
+        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'not-type', b'my-content')
 
         bad_auth_header = re.sub(r', nonce="[^"]+"', '', header)
         is_auth, error, creds = await authenticate_hawk_header(
@@ -174,7 +174,7 @@ class TestIntegration(unittest.TestCase):
     @async_test
     async def test_correct_header_then_authenticated(self):
         url = 'http://my-domain:8080/v1/'
-        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'my-type', 'my-content')
+        header = hawk_auth_header('my-id', 'my-secret', url, 'POST', 'my-type', b'my-content')
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
