@@ -34,7 +34,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-content-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Unidentified id')
