@@ -34,7 +34,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Unidentified id')
@@ -47,7 +47,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid mac')
@@ -60,7 +60,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid mac')
@@ -73,7 +73,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid hash')
@@ -86,7 +86,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid hash')
@@ -101,7 +101,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Stale ts')
@@ -125,7 +125,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce_true, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid nonce')
@@ -137,7 +137,7 @@ class TestIntegration(unittest.TestCase):
     async def test_invalid_header_format_then_not_authenticated(self):
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            'Hawk d', 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            'Hawk d', 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid header')
@@ -151,7 +151,7 @@ class TestIntegration(unittest.TestCase):
         bad_auth_header = re.sub(r'ts="[^"]+"', 'ts="non-numeric"', header)
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            bad_auth_header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            bad_auth_header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Invalid ts')
@@ -165,7 +165,7 @@ class TestIntegration(unittest.TestCase):
         bad_auth_header = re.sub(r', nonce="[^"]+"', '', header)
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            bad_auth_header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            bad_auth_header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, False)
         self.assertEqual(error, 'Missing nonce')
@@ -178,7 +178,7 @@ class TestIntegration(unittest.TestCase):
 
         is_auth, error, creds = await authenticate_hawk_header(
             lookup_credentials, seen_nonce, 60,
-            header, 'POST', 'my-domain', '8080', '/v1/', b'my-type', b'my-content',
+            header, 'POST', 'my-domain', '8080', '/v1/', 'my-type', b'my-content',
         )
         self.assertEqual(is_auth, True)
         self.assertEqual(error, '')
