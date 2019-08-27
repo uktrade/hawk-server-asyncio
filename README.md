@@ -6,7 +6,7 @@ Utility function to perform the server-side of Hawk authentication
 ## Installation
 
 ```bash
-pip install hawkserver
+pip install hawk-server-asyncio
 ```
 
 
