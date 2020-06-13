@@ -21,7 +21,7 @@ setuptools.setup(
         'License :: OSI Approved :: MIT License',
         'Framework :: AsyncIO',
     ],
-    python_requires='>=3.7.0',
+    python_requires='>=3.6.3',
     py_modules=[
         'hawkserver',
     ],
