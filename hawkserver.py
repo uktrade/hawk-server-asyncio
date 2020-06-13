@@ -13,6 +13,16 @@ async def authenticate_hawk_header(
         lookup_credentials, seen_nonce, max_skew,
         header, method, host, port, path, content_type, content,
 ):
+
+    def base64_digest(chunks):
+        m = hashlib.sha256()
+        for chunk in chunks:
+            m.update(chunk)
+        return b64encode(m.digest()).decode('ascii')
+
+    def base64_mac(key, data):
+        return b64encode(hmac.new(key, data, hashlib.sha256).digest()).decode('ascii')
+
     is_valid_header = re.match(r'^Hawk (((?<="), )?[a-z]+="[^"]*")*$', header)
     if not is_valid_header:
         return 'Invalid header', None
@@ -38,13 +48,13 @@ async def authenticate_hawk_header(
         f'hawk.1.payload\n{content_type}\n'.encode('ascii'),
         content, b'\n',
     )
-    payload_hash = _base64_digest(canonical_payload)
+    payload_hash = base64_digest(canonical_payload)
 
     canonical_request = \
         f'hawk.1.header\n{parsed_header["ts"]}\n{parsed_header["nonce"]}\n' \
         f'{method}\n{path}\n{host}\n{port}\n' \
         f'{payload_hash}\n\n'
-    correct_mac = _base64_mac(
+    correct_mac = base64_mac(
         matching_credentials['key'].encode('ascii'), canonical_request.encode('ascii'))
 
     if not hmac.compare_digest(payload_hash, parsed_header['hash']):
@@ -60,14 +70,3 @@ async def authenticate_hawk_header(
         return 'Invalid nonce', None
 
     return None, matching_credentials
-
-
-def _base64_digest(chunks):
-    m = hashlib.sha256()
-    for chunk in chunks:
-        m.update(chunk)
-    return b64encode(m.digest()).decode('ascii')
-
-
-def _base64_mac(key, data):
-    return b64encode(hmac.new(key, data, hashlib.sha256).digest()).decode('ascii')
