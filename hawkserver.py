@@ -34,10 +34,10 @@ async def authenticate_hawk_header(
     if not matching_credentials:
         return 'Unidentified id', None
 
-    canonical_payload = \
-        b'hawk.1.payload' b'\n' + \
-        content_type.encode('ascii') + b'\n' + \
-        content + b'\n'
+    canonical_payload = (
+        f'hawk.1.payload\n{content_type}\n'.encode('ascii'),
+        content, b'\n',
+    )
     payload_hash = _base64_digest(canonical_payload)
 
     canonical_request = \
@@ -62,8 +62,11 @@ async def authenticate_hawk_header(
     return None, matching_credentials
 
 
-def _base64_digest(data):
-    return b64encode(hashlib.sha256(data).digest()).decode('ascii')
+def _base64_digest(chunks):
+    m = hashlib.sha256()
+    for chunk in chunks:
+        m.update(chunk)
+    return b64encode(m.digest()).decode('ascii')
 
 
 def _base64_mac(key, data):
