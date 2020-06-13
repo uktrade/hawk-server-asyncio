@@ -11,13 +11,15 @@ setuptools.setup(
     version='0.0.7',
     author='Department for International Trade',
     author_email='webops@digital.trade.gov.uk',
-    description='Utility function to perform the server-side of Hawk authentication',
+    description='Utility function to perform the server-side of Hawk '
+    'authentication for asyncio HTTP servers',
     long_description=long_description(),
     long_description_content_type='text/markdown',
     url='https://github.com/uktrade/hawk-server-asyncio',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
+        'Framework :: AsyncIO',
     ],
     python_requires='>=3.7.0',
     py_modules=[
