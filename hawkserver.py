@@ -1,9 +1,5 @@
-from base64 import (
-    b64encode,
-)
-from datetime import (
-    datetime,
-)
+from base64 import b64encode
+from datetime import datetime
 import hashlib
 import hmac
 import re
