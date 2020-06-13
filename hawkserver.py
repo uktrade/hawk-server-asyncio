@@ -36,7 +36,7 @@ async def authenticate_hawk_header(
 
     canonical_payload = \
         b'hawk.1.payload' + b'\n' + \
-        content_type.encode('utf-8') + b'\n' + \
+        content_type.encode('ascii') + b'\n' + \
         content + b'\n'
     payload_hash = _base64_digest(canonical_payload)
 
@@ -45,7 +45,7 @@ async def authenticate_hawk_header(
         f'\n{method}\n{path}\n{host}\n{port}\n' \
         f'{payload_hash}\n\n'
     correct_mac = _base64_mac(
-        matching_credentials['key'].encode('utf-8'), canonical_request.encode('utf-8'))
+        matching_credentials['key'].encode('ascii'), canonical_request.encode('ascii'))
 
     if not hmac.compare_digest(payload_hash, parsed_header['hash']):
         return 'Invalid hash', None
@@ -63,8 +63,8 @@ async def authenticate_hawk_header(
 
 
 def _base64_digest(data):
-    return b64encode(hashlib.sha256(data).digest()).decode('utf-8')
+    return b64encode(hashlib.sha256(data).digest()).decode('ascii')
 
 
 def _base64_mac(key, data):
-    return b64encode(hmac.new(key, data, hashlib.sha256).digest()).decode('utf-8')
+    return b64encode(hmac.new(key, data, hashlib.sha256).digest()).decode('ascii')
