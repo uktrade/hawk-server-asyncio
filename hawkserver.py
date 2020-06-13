@@ -41,8 +41,8 @@ async def authenticate_hawk_header(
     payload_hash = _base64_digest(canonical_payload)
 
     canonical_request = \
-        f'hawk.1.header\n{parsed_header["ts"]}\n{parsed_header["nonce"]}' \
-        f'\n{method}\n{path}\n{host}\n{port}\n' \
+        f'hawk.1.header\n{parsed_header["ts"]}\n{parsed_header["nonce"]}\n' \
+        f'{method}\n{path}\n{host}\n{port}\n' \
         f'{payload_hash}\n\n'
     correct_mac = _base64_mac(
         matching_credentials['key'].encode('ascii'), canonical_request.encode('ascii'))
