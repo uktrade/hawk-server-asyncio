@@ -1,6 +1,6 @@
 # hawk-server-asyncio [![CircleCI](https://circleci.com/gh/uktrade/hawk-server-asyncio.svg?style=shield)](https://circleci.com/gh/uktrade/hawk-server-asyncio) [![Test Coverage](https://api.codeclimate.com/v1/badges/b03db2f3cb9fedeb4ea7/test_coverage)](https://codeclimate.com/github/uktrade/hawk-server-asyncio/test_coverage)
 
-Utility function to perform the server-side of Hawk authentication
+Utility function to perform the server-side of Hawk authentication for asyncio HTTP servers
 
 
 ## Installation
