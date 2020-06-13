@@ -35,7 +35,7 @@ async def authenticate_hawk_header(
         return 'Unidentified id', None
 
     canonical_payload = \
-        b'hawk.1.payload' + b'\n' + \
+        b'hawk.1.payload' b'\n' + \
         content_type.encode('ascii') + b'\n' + \
         content + b'\n'
     payload_hash = _base64_digest(canonical_payload)
