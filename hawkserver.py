@@ -7,20 +7,23 @@ from datetime import (
 import hashlib
 import hmac
 import re
+from typing import Awaitable, Callable, Dict, Optional, Tuple
 
 
 async def authenticate_hawk_header(
-        lookup_credentials, seen_nonce, max_skew,
-        header, method, host, port, path, content_type, content,
-):
+        lookup_credentials: Callable[[str], Awaitable[Optional[Dict]]],
+        seen_nonce: Callable[[str, str], Awaitable[bool]], max_skew: int,
+        header: str, method: str, host: str, port: str, path: str,
+        content_type: str, content: bytes,
+) -> Tuple[Optional[str], Optional[Dict]]:
 
-    def base64_digest(chunks):
+    def base64_digest(chunks: Tuple[bytes, ...]) -> str:
         m = hashlib.sha256()
         for chunk in chunks:
             m.update(chunk)
         return b64encode(m.digest()).decode('ascii')
 
-    def base64_mac(key, data):
+    def base64_mac(key: bytes, data: bytes) -> str:
         return b64encode(hmac.new(key, data, hashlib.sha256).digest()).decode('ascii')
 
     is_valid_header = re.match(r'^Hawk (((?<="), )?[a-z]+="[^"]*")*$', header)
