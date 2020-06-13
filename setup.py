@@ -8,7 +8,7 @@ def long_description():
 
 setuptools.setup(
     name='hawk-server-asyncio',
-    version='0.0.7',
+    version='0.0.8',
     author='Department for International Trade',
     author_email='webops@digital.trade.gov.uk',
     description='Utility function to perform the server-side of Hawk '
