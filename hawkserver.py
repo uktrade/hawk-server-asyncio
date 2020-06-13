@@ -19,11 +19,11 @@ async def authenticate_hawk_header(
 
     parsed_header = dict(re.findall(r'([a-z]+)="([^"]+)"', header))
 
-    required_fields = ['ts', 'hash', 'mac', 'nonce', 'id']
-    missing_fields = [
+    required_fields = ('ts', 'hash', 'mac', 'nonce', 'id')
+    missing_fields = tuple(
         field for field in required_fields
         if field not in parsed_header
-    ]
+    )
     if missing_fields:
         return f'Missing {missing_fields[0]}', None
 
